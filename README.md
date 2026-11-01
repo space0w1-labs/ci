@@ -8,6 +8,8 @@ Shared GitHub Actions workflows for the `space0w1-labs` org. Jobs run on the org
 
 This repo holds the review logic, but a PR can only start workflows from its own repo. So each reviewed repo keeps a small caller workflow that points here.
 
+For how the pieces fit together, see [Concepts](docs/concepts.md).
+
 ## How a review runs
 
 ```mermaid
@@ -43,6 +45,7 @@ Do this once:
 1. Install the [Claude GitHub App](https://github.com/apps/claude) on `space0w1-labs`, and select the repos to review.
 2. Add `ANTHROPIC_API_KEY` under **Org Settings → Secrets and variables → Actions**, with access to those repos.
 3. Under **Org Settings → Actions → General**, allow `anthropics/claude-code-action` and reusable workflows from this org.
+4. Make sure the runner has `unzip`, `gh` and `git` installed. See [Runner requirements](docs/concepts.md#runner-requirements).
 
 ## Add a repo
 
@@ -65,7 +68,7 @@ jobs:
     secrets: inherit
 ```
 
-Then open a PR. The `Claude review` check should run on `github-runner`, and comments appear if the review finds anything.
+Merge that file first, because the PR that adds it may fail a validation check. Then open a second PR. The `Claude review` check should run on `github-runner`, and comments appear if the review finds anything.
 
 `secrets: inherit` only works when this repo and the calling repo are in the same org. This repo must stay public, because public repos can't call reusable workflows in a private repo.
 
